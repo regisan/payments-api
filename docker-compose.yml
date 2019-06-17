@@ -1,0 +1,15 @@
+version: '3'
+services:
+  payments:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: amazoncorretto
+    container_name: payments-api
+    ports:
+      - "80:8080"
+    networks:
+      - prodnet
+networks:
+  prodnet:
+    driver: bridge
