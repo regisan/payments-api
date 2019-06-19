@@ -18,4 +18,5 @@ public enum  OperationType {
     private final int id;
     private final int chargeOrder;
 
+
 }

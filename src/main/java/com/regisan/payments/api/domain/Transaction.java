@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "Transactions")
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 
     public static final int DAYS_BEFORE_DUE_DATE = 7;
 
@@ -37,4 +37,12 @@ public class Transaction {
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
+
+    @Override
+    public int compareTo(Transaction otherTransaction) {
+        if (Integer.compare(this.operationType.getChargeOrder(), otherTransaction.operationType.getChargeOrder()) == 1)
+            return this.eventDate.compareTo(otherTransaction.eventDate);
+
+        return Integer.compare(this.operationType.getChargeOrder(), otherTransaction.operationType.getChargeOrder());
+    }
 }
