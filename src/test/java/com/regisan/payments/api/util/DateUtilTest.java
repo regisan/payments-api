@@ -13,7 +13,7 @@ public class DateUtilTest {
     private static final int DAYS_BEFORE_DUE_DATE = 7;
 
     @Test
-    public void dueDateSameBillingCycleButPreviousMonth() {
+    public void testDueDateSameBillingCycleButPreviousMonth() {
 
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(2019, Month.MAY.getValue(), 25);
@@ -26,7 +26,7 @@ public class DateUtilTest {
     }
 
     @Test
-    public void dueDateSameBillingCycleAndSameMonth() {
+    public void testDueDateSameBillingCycleAndSameMonth() {
 
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(2019, Month.JUNE.getValue(), 2);
@@ -39,7 +39,7 @@ public class DateUtilTest {
     }
 
     @Test
-    public void dueDateNextBillingCycle() {
+    public void testDueDateNextBillingCycle() {
 
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(2019, Month.JUNE.getValue(), 5);
@@ -52,7 +52,7 @@ public class DateUtilTest {
     }
 
     @Test
-    public void dueDateEndOfFebruary() {
+    public void testDueDateEndOfFebruary() {
 
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(2019, Month.FEBRUARY.getValue(), 28);
@@ -65,7 +65,7 @@ public class DateUtilTest {
     }
 
     @Test
-    public void dueDateEndOfTheYear() {
+    public void testDueDateEndOfTheYear() {
 
         Calendar eventDate = Calendar.getInstance();
         eventDate.set(2018, Month.DECEMBER.getValue(), 31);
@@ -76,5 +76,17 @@ public class DateUtilTest {
         assertEquals(DUE_DATE, dueDate.get(Calendar.DAY_OF_MONTH));
         assertEquals(Month.JANUARY.getValue(), dueDate.get(Calendar.MONTH));
         assertEquals(2019, dueDate.get(Calendar.YEAR));
+    }
+
+    @Test
+    public void testAddMonth() {
+
+        Calendar date = Calendar.getInstance();
+        date.set(2019, Month.DECEMBER.getValue(), 10);
+
+        Calendar dueDate = Calendar.getInstance();
+        dueDate.setTime(DateUtil.addMonth(date.getTime(), 1));
+
+        assertEquals(Month.JANUARY.getValue(), dueDate.get(Calendar.MONTH));
     }
 }

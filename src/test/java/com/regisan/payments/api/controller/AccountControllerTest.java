@@ -56,7 +56,7 @@ public class AccountControllerTest {
     public void testAddAccount() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
-        mvc.perform(post("/accounts/")
+        mvc.perform(post("/v1/accounts/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(account)))
                 .andExpect(status().isCreated());
@@ -68,7 +68,7 @@ public class AccountControllerTest {
 
         given(service.add(account)).willThrow(new AccountException("Conta ja existe"));
 
-        mvc.perform(post("/accounts/")
+        mvc.perform(post("/v1/accounts/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(account)))
                 .andExpect(status().isBadRequest());
@@ -79,7 +79,7 @@ public class AccountControllerTest {
         List<Account> allAccounts = Arrays.asList(account);
 
         given(service.findAll()).willReturn(allAccounts);
-        mvc.perform(get("/accounts/limits")
+        mvc.perform(get("/v1/accounts/limits")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -106,7 +106,7 @@ public class AccountControllerTest {
 
         given(service.updateLimits(account.getId(), amount, amount)).willReturn(account);
 
-        mvc.perform(patch("/accounts/1")
+        mvc.perform(patch("/v1/accounts/1")
                 .content(mapper.writeValueAsString(limitsUpdate))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -133,7 +133,7 @@ public class AccountControllerTest {
 
         given(service.updateLimits(account.getId(), amount, amount)).willReturn(account);
 
-        mvc.perform(patch("/accounts/1")
+        mvc.perform(patch("/v1/accounts/1")
                 .content(mapper.writeValueAsString(limitsUpdate))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -158,7 +158,7 @@ public class AccountControllerTest {
         ObjectMapper mapper = new ObjectMapper();
 
         given(service.updateLimits(account.getId(), amount, amount)).willReturn(account);
-        mvc.perform(patch("/accounts/1")
+        mvc.perform(patch("/v1/accounts/1")
                 .content(mapper.writeValueAsString(limitsUpdate))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

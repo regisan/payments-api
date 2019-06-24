@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Data
 public class TransactionDTO implements Serializable {
@@ -16,6 +17,9 @@ public class TransactionDTO implements Serializable {
 
     @JsonProperty("operation_type_id")
     private Integer operationTypeId;
+
+    @JsonProperty(value = "installment_plan", required = false)
+    private Integer installmentPlan;
 
     private BigDecimal amount;
 

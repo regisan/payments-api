@@ -16,7 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -77,12 +79,15 @@ public class TransactionServiceTest {
         t.setEventDate(new Date());
         t.setDueDate(DateUtil.getNextDueDate(t.getEventDate(), Account.DUE_DATE, Transaction.DAYS_BEFORE_DUE_DATE));
 
-        when(repository.save(any(Transaction.class))).thenReturn(t);
+        List<Transaction> transactionList = new ArrayList<>();
+        transactionList.add(t);
 
-        Transaction response = service.add(dto);
+        when(repository.saveAll(any(List.class))).thenReturn(transactionList);
+
+        List<Transaction> response = service.add(dto);
 
         assertNotNull(response);
-        assertThat(response.getAccount().getAvailableCreditLimit(), is(account.getAvailableCreditLimit().subtract(amount)));
+        assertThat(response.get(0).getAccount().getAvailableCreditLimit(), is(account.getAvailableCreditLimit().subtract(amount)));
     }
 
     @Test(expected = TransactionException.class)
@@ -122,6 +127,26 @@ public class TransactionServiceTest {
 
         service.add(dto);
 
+    }
+
+    @Test
+    public void testPayment() {
+        BigDecimal amount = new BigDecimal("200.00");
+
+        dto.setAmount(amount);
+        dto.setOperationTypeId(OperationType.PAGAMENTO.getId());
+
+        Account updatedAccount = new Account();
+        updatedAccount.setId(account.getId());
+        updatedAccount.setAvailableCreditLimit(account.getAvailableCreditLimit().add(amount));
+        updatedAccount.setAvailableWithdrawalLimit(account.getAvailableWithdrawalLimit());
+
+        given(accountService.findById(account.getId())).willReturn(account);
+        given(accountService.updateLimits(account.getId(), amount, BigDecimal.ZERO)).willReturn(updatedAccount);
+
+        service.add(dto);
+
+        System.out.println(account.getAvailableCreditLimit());
     }
 
 }

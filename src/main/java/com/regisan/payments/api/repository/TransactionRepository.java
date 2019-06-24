@@ -1,5 +1,6 @@
 package com.regisan.payments.api.repository;
 
+import com.regisan.payments.api.domain.Account;
 import com.regisan.payments.api.domain.OperationType;
 import com.regisan.payments.api.domain.Transaction;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,9 +11,19 @@ import java.math.BigDecimal;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
 
+    static Specification<Transaction> hasAccount(Account account) {
+        return (transaction, cQuery, cBuilder) ->
+                cBuilder.equal(transaction.get("account"), account);
+    }
+
     static Specification<Transaction> hasNegativeBalance() {
         return (transaction, cQuery, cBuilder) ->
                 cBuilder.lessThan(transaction.get("balance"), BigDecimal.ZERO);
+    }
+
+    static Specification<Transaction> hasPositiveBalance() {
+        return (transaction, cQuery, cBuilder) ->
+                cBuilder.greaterThan(transaction.get("balance"), BigDecimal.ZERO);
     }
 
     static Specification<Transaction> hasOperationType(OperationType op) {

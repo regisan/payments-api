@@ -10,9 +10,7 @@ public class DateUtil {
 
     public static Date getNextDueDate(Date eventDate, int dueDate, int daysBeforeDueDate) {
 
-        Instant instant = Instant.ofEpochMilli(eventDate.getTime());
-        LocalDateTime futureDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        LocalDate future = futureDateTime.toLocalDate().plusDays(daysBeforeDueDate);
+        LocalDate future = convert(eventDate).plusDays(daysBeforeDueDate);
 
         LocalDate endBillingCycle = LocalDate.of(future.getYear(), future.getMonth(), dueDate);
 
@@ -20,5 +18,15 @@ public class DateUtil {
             return Date.from(endBillingCycle.plusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         return Date.from(endBillingCycle.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static Date addMonth(Date date, int months) {
+        LocalDate localDate = convert(date);
+        return Date.from(localDate.plusMonths(months).atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static LocalDate convert(Date date) {
+        Instant instant = Instant.ofEpochMilli(date.getTime());
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
     }
 }

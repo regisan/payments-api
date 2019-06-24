@@ -26,4 +26,13 @@ Todos os comandos abaixo devem ser executados no diretorio raiz do projeto
 `sudo docker-compose down`
 
 ## Documentação da API
-TODO
+http://localhost/payments/api/swagger-ui.html
+
+## Acesso ao banco de dados (H2 memory)
+http://localhost/payments/api/h2-console/
+
+- Driver Class: org.h2.Driver
+- JDBC URL: jdbc:h2:mem:testdb
+- User name: sa
+- Password:
+

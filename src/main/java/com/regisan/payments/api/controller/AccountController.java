@@ -3,6 +3,7 @@ package com.regisan.payments.api.controller;
 import com.regisan.payments.api.domain.Account;
 import com.regisan.payments.api.exception.AccountException;
 import com.regisan.payments.api.service.AccountService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/accounts")
 public class AccountController {
 
     private AccountService accountService;
@@ -21,7 +21,8 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping
+    @ApiOperation(value = "Add a new account.")
+    @PostMapping("v1/accounts")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Account> addAccount(@RequestBody Account account) {
         return ResponseEntity
@@ -29,7 +30,8 @@ public class AccountController {
                 .body(accountService.add(account));
     }
 
-    @PatchMapping("/{id}")
+    @ApiOperation(value = "It updates the credit and withdrawal limits of an account.")
+    @PatchMapping("v1/accounts/{id}")
     public ResponseEntity<Account> updateAccountLimits(@PathVariable("id") Long accountId,
                                                        @RequestBody Map<String, Map<String, BigDecimal>> limitsUpdate) {
 
@@ -49,7 +51,8 @@ public class AccountController {
                 .body(accountService.updateLimits(accountId, creditAmount, withdrawalAmount));
     }
 
-    @GetMapping("/limits")
+    @ApiOperation(value = "It returns the credit and withdrawal limits of all accounts.")
+    @GetMapping("v1/accounts/limits")
     public List<Account> getAccountLimits() {
         return accountService.findAll();
     }
